@@ -20,5 +20,12 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
             .HasColumnName("Title")
             .HasColumnType("nvarchar(250)")
             .HasMaxLength(250);
+
+
+
+       // builder.HasMany(a => a.ApplicationPermissions)
+              // .WithOne(ap => ap.Application)
+             //  .HasForeignKey(ap => ap.ApplicationId)
+              // .OnDelete(DeleteBehavior.Cascade);
     }
 }

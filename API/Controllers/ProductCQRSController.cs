@@ -1,4 +1,5 @@
-﻿using Application.CQRS.ProductCommandQuery.Command;
+﻿using API.CustomAttributes;
+using Application.CQRS.ProductCommandQuery.Command;
 using Application.CQRS.ProductCommandQuery.Query;
 using AutoMapper;
 using MediatR;
@@ -24,6 +25,7 @@ namespace API.Controllers
         public IMapper Mapper { get; }
 
         [HttpPost]
+        [AccessControl(Permission =  "product-add")]
         public async Task<IActionResult> Create(SaveProductCommand product)
         {
           var result = await mediator.Send(product);

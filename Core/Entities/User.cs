@@ -14,5 +14,8 @@ namespace Core.Entities
         public string PasswordSalt { get; set; }
         public DateTime RegisterDate { get; set; }
         public DateTime? LastLoginDate { get; set; }
+
+
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }

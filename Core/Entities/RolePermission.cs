@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Core.Entities; 
 
-public class RoleApplicationPermission
+public class RolePermission
 {
     public int Id { get; set; }
     public int RoleId { get; set; }
-    public required Role Role { get; set; }
-    public int ApplicationPermissionId { get; set; }
-    public required ApplicationPermission ApplicationPermission { get; set; }
+    public  Role Role { get; set; }
+    public int PermissionId { get; set; }
+    public  Permission Permission { get; set; }
 
 
 }

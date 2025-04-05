@@ -17,7 +17,8 @@ namespace Core.FluentAPIConfigurations
             builder.HasKey(x => x.Id);
             builder.Property(p => p.UserName)
                 .IsRequired()
-                .HasMaxLength(64);
+                .HasColumnType("nvarchar(100)")
+                .HasMaxLength(100);
                 
         }
     }

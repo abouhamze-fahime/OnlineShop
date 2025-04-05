@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Entities; 
+namespace Core.Entities;
 
-public class Role
+public class Permission
 {
     public int Id { get; set; }
-    public string RoleName { get; set; }
-    public bool IsActive { get; set; }
-
-    //navigation properties 
+    public string Title  { get; set; }
+    public string PermissionFlag  { get; set; }
     public ICollection<RolePermission> RolePermissions { get; set; }
-    public ICollection<UserRole> UserRoles { get; set; }
 }
+
+

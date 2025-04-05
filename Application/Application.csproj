@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <Folder Include="CQRS\AuthenticateCommandQuery\Query\" />
+    <Folder Include="CQRS\RolePermissionCommandQuery\Query\" />
+    <Folder Include="CQRS\UserCommandQuery\Query\" />
+    <Folder Include="CQRS\UserRoleCommandQuery\Query\" />
   </ItemGroup>
 
   <PropertyGroup>
