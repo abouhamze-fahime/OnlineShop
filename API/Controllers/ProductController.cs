@@ -1,3 +1,4 @@
+using API.CustomAttributes;
 using Application.Interfaces;
 using Infrastructure.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,7 @@ public class ProductController : ControllerBase
    
 
     [HttpGet("{id}")]
+   [AccessControl(Permission = "get-by-id")]
     public async Task<IActionResult> Get(int id)
     {
         var result = await _service.GetAsync(id);

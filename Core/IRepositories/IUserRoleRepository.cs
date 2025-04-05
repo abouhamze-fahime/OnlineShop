@@ -10,4 +10,6 @@ namespace Core.IRepositories;
 public interface IUserRoleRepository
 {
     Task<UserRole> AddAsync(UserRole userRole);
+
+    Task<List<int>> GetRolesByUserIdAsync(Guid userId);
 }

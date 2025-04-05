@@ -1,4 +1,5 @@
 using API;
+using Application;
 using Application.CQRS.ProductCommandQuery.Command;
 using Application.Interfaces;
 using Application.Services;
@@ -26,14 +27,14 @@ builder.Services.Configure<AppConfigurations>(builder.Configuration.GetSection("
 //builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OnlineShopDbContext>(optins=> optins.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnection")));
-builder.Services.AddScoped<IProductService , ProductService>();
+builder.Services.ApplicationServices();
 builder.Services.AddRepositories();
 builder.Services.AddUnitOfWork();
 builder.Services.AddInfraUtility();
 builder.Services.AddJWT();
 
-
-
+///dotnet add package Microsoft.Extensions.Caching.Memory --version 9.0.3
+builder.Services.AddMemoryCache();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SaveProductCommandHandler).Assembly));

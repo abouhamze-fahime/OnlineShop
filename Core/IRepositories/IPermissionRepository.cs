@@ -12,4 +12,6 @@ public interface IPermissionRepository
     Task<Permission> AddAsync(Permission applicationPermission);
 
     Task<List<Permission>> GetAllAsync();
+
+    
 }

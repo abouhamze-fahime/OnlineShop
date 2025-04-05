@@ -25,7 +25,7 @@ namespace API.Controllers
         public IMapper Mapper { get; }
 
         [HttpPost]
-        [AccessControl(Permission =  "product-add")]
+       
         public async Task<IActionResult> Create(SaveProductCommand product)
         {
           var result = await mediator.Send(product);
@@ -33,6 +33,7 @@ namespace API.Controllers
         }
 
         [HttpGet("id")]
+        [AccessControl(Permission = "get-by-id")]
         public async Task <IActionResult> GetProduct([FromQuery] GetProductQuery getProductQuery)
         {
           

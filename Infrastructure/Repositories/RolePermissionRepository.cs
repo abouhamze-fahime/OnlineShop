@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.IRepositories;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,15 @@ public class RolePermissionRepository : IRolePermissionRepository
     {
         await onlineShopDbContext.RolePermission.AddAsync(permission);
         return permission;
+    }
+
+    public async Task<List<string>> GetAllPermissionByRoleIdAsync(List<int> roleIds )
+    {
+        var permissionIds = await onlineShopDbContext.RolePermission
+            .Where(p=> roleIds.Contains(p.RoleId))
+            .Select(p=>p.Permission.PermissionFlag)
+            .ToListAsync();
+        return permissionIds;
+
     }
 }

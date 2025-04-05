@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.IRepositories;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,13 @@ public class UserRoleRepository : IUserRoleRepository
     {
        await  onlineShopDbContext.UserRoles.AddAsync(userRole);
         return userRole;
+    }
+
+    public async Task<List<int>> GetRolesByUserIdAsync(Guid userId)
+    {
+        var roleIds = await onlineShopDbContext.UserRoles
+            .Where(r=>r.UserId==userId && r.Role.IsActive)
+            .Select(r=>r.RoleId).ToListAsync();
+        return roleIds;
     }
 }

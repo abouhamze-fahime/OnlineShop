@@ -10,4 +10,6 @@ namespace Core.IRepositories;
 public interface IRolePermissionRepository
 {
     Task<RolePermission> AddAsync(RolePermission permission);
+
+    Task<List<string>> GetAllPermissionByRoleIdAsync(List<int> roleIds);
 }

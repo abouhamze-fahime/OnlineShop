@@ -26,6 +26,8 @@ public class PermissionRepository : IPermissionRepository
         return applicationPermission;
     }
 
+  
+
     public async Task<List<Permission>> GetAllAsync()
     {
       var result =  await onlineShopDbContext.Permissions.AsNoTracking().ToListAsync();
