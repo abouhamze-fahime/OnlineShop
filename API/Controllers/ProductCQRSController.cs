@@ -22,11 +22,12 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        public IMapper Mapper { get; }
+       
 
         [HttpPost]
-       
-        public async Task<IActionResult> Create(SaveProductCommand product)
+       // [AccessControl(Permission = "create-product")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Create([FromForm] SaveProductCommand product)
         {
           var result = await mediator.Send(product);
             return Ok(result);

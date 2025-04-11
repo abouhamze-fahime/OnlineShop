@@ -38,6 +38,7 @@ namespace Infrastructure
         public static void AddInfraUtility(this IServiceCollection services)
         {
             services.AddSingleton<EncryptionUtility>();
+            services.AddSingleton<FileUtility>();
         }
 
 

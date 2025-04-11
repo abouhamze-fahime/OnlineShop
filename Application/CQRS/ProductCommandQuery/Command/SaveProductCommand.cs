@@ -1,6 +1,8 @@
 ﻿using Core.IRepositories;
 using Infrastructure.Interfaces;
+using Infrastructure.Utility;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,11 @@ namespace Application.CQRS.ProductCommandQuery.Command;
 public class SaveProductCommand : IRequest<SaveProductCommandResponse>
 {
     public string ProductName { get; set; }
-    public int CategoryId { get; set; }
+    // public int CategoryId { get; set; }
     public long Price { get; set; }
-    public string Description { get; set; }
+    // public string Description { get; set; }
+
+    public IFormFile Thumbnail { get; set; }
 }
 
 public class SaveProductCommandResponse
@@ -27,11 +31,17 @@ public class SaveProductCommandHandler : IRequestHandler<SaveProductCommand, Sav
 {
     private readonly IProductRepository productRepository;
     private readonly IUnitOfWork unitOfWork;
+    private readonly FileUtility file;
 
-    public SaveProductCommandHandler( IProductRepository productRepository , IUnitOfWork unitOfWork)
+    public SaveProductCommandHandler(
+        IProductRepository productRepository,
+        IUnitOfWork unitOfWork,
+        FileUtility file
+        )
     {
         this.productRepository = productRepository;
         this.unitOfWork = unitOfWork;
+        this.file = file;
     }
 
     public async Task<SaveProductCommandResponse> Handle(SaveProductCommand request, CancellationToken cancellationToken)
@@ -40,8 +50,24 @@ public class SaveProductCommandHandler : IRequestHandler<SaveProductCommand, Sav
         {
             ProductName = request.ProductName,
             Price = request.Price,
+            Thumbnail = file.ConvertToByteArray(request.Thumbnail),
+            ThumbnailFileExtension = file.GetFileExtension(request.Thumbnail.FileName),
+            ThumbnailFileName = request.Thumbnail.FileName,
+            FileSize = request.Thumbnail.Length
         };
-        await  productRepository.InsertAsync(product);
+
+        // save in folders
+        //string filePath = "";
+        //FileInfo fileInfo = new FileInfo(request.Thumbnail.FileName);
+        //string fileName = request.Thumbnail.FileName + fileInfo.Extension;
+        //string fileNameWithPath = Path.Combine(filePath, fileName);
+        //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+        //{
+        //    request.Thumbnail.CopyTo(stream);
+
+        //}
+
+        await productRepository.InsertAsync(product);
         var result = await unitOfWork.SaveChangesAsync();
         var response = new SaveProductCommandResponse
         {
@@ -49,4 +75,6 @@ public class SaveProductCommandHandler : IRequestHandler<SaveProductCommand, Sav
         };
         return response;
     }
+
+
 }

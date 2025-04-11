@@ -36,7 +36,7 @@ public class PermissionService : IPermissionService
 
         var permissionFlags = new List<string>();
 
-        if (memoryCache.TryGetValue(permissionCacheKey, out permissionFlags))
+        if (!memoryCache.TryGetValue(permissionCacheKey, out permissionFlags))
         {
 
             //GetRoleQuery(userId);
