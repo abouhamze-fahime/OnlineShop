@@ -20,7 +20,9 @@ public class GetProductQueryResponse
     public string Title { get; set; }
   
     public string PriceWithComma { get; set; }
-   
+    public string ThumbnailFileName { get; set; }
+    public long FileSize { get; set; }
+
 }
 
 public class ProductQueryHandler : IRequestHandler<GetProductQuery, GetProductQueryResponse>
@@ -36,6 +38,9 @@ public class ProductQueryHandler : IRequestHandler<GetProductQuery, GetProductQu
     public async Task<GetProductQueryResponse> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
         var product = await this.productRepository.GetAsync(request.Id);
+
+
+
 
         var result = mapper.Map<GetProductQueryResponse>(product);
 

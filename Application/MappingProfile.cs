@@ -1,8 +1,10 @@
 using Application.CQRS.Notifications;
+using Application.CQRS.ProductCommandQuery.Command;
 using Application.CQRS.ProductCommandQuery.Query;
 using AutoMapper;
 using Core.Entities;
 using Infrastructure.Dto;
+using Infrastructure.Utility;
 
 public class MappingProfile : Profile
 {
@@ -14,6 +16,8 @@ public class MappingProfile : Profile
         
         CreateMap<ProductDto, Product>()
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => long.Parse((src.PriceWithComma ?? "0").Replace(",", ""))));
+        //CreateMap<SaveProductCommand, Product>()
+        //    .ForMember(dest => dest.Thumbnail,opt=>opt.MapFrom(src=> FileUtility.ConvertToByteArray(src.Thumbnail)))
 
         CreateMap<Product, GetProductQueryResponse>()
             .ForMember(dest => dest.PriceWithComma, opt => opt.MapFrom(src => src.Price.ToString("N0")))

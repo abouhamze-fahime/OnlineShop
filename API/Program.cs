@@ -11,8 +11,17 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-var builder = WebApplication.CreateBuilder(args);
-
+//var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    ApplicationName=typeof(Program).Assembly.FullName,
+    ContentRootPath=Path.GetFullPath(Directory.GetCurrentDirectory()),
+    WebRootPath=Path.GetFullPath(Directory.GetCurrentDirectory()),
+    Args=args
+});
+    
+    
+    
 
 //fill AppConfigurations from appsetting.json
 

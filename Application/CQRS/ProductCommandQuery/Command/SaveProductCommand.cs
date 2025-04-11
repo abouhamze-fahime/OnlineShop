@@ -46,26 +46,20 @@ public class SaveProductCommandHandler : IRequestHandler<SaveProductCommand, Sav
 
     public async Task<SaveProductCommandResponse> Handle(SaveProductCommand request, CancellationToken cancellationToken)
     {
-        var product = new Product
+        Product product = new()
         {
             ProductName = request.ProductName,
             Price = request.Price,
+            //save into folders
+            ThumbnailFileName = file.SaveFileInFolder(request.Thumbnail , nameof(Product)), //request.Thumbnail.FileName,
+
+
             Thumbnail = file.ConvertToByteArray(request.Thumbnail),
             ThumbnailFileExtension = file.GetFileExtension(request.Thumbnail.FileName),
-            ThumbnailFileName = request.Thumbnail.FileName,
             FileSize = request.Thumbnail.Length
         };
 
-        // save in folders
-        //string filePath = "";
-        //FileInfo fileInfo = new FileInfo(request.Thumbnail.FileName);
-        //string fileName = request.Thumbnail.FileName + fileInfo.Extension;
-        //string fileNameWithPath = Path.Combine(filePath, fileName);
-        //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-        //{
-        //    request.Thumbnail.CopyTo(stream);
 
-        //}
 
         await productRepository.InsertAsync(product);
         var result = await unitOfWork.SaveChangesAsync();
