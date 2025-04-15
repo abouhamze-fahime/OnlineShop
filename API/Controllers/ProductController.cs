@@ -30,9 +30,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet()]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(int page , int size)
     {
-        var result = await _service.GetAllAsync();
+        var result = await _service.GetAllAsync(page , size );
         return Ok(result);
     }
 

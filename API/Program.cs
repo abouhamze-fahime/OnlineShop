@@ -9,6 +9,7 @@ using Infrastructure.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
 //var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,12 @@ builder.Services.Configure<AppConfigurations>(builder.Configuration.GetSection("
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 builder.Services.AddControllers();
-builder.Services.AddDbContext<OnlineShopDbContext>(optins=> optins.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnection")));
+builder.Services.AddDbContext<OnlineShopDbContext>(optins =>
+{
+    optins
+    .UseSqlServer(builder.Configuration.GetConnectionString("sqlconnection"))
+    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+});
 builder.Services.ApplicationServices();
 builder.Services.AddRepositories();
 builder.Services.AddUnitOfWork();
@@ -60,6 +66,7 @@ builder.Services.AddEndpointsApiExplorer();
 //});
 
 builder.Services.AddSwagger();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -73,7 +80,12 @@ if (app.Environment.IsDevelopment())
     });
 
 }
-
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "Media")),
+    RequestPath = "/Media"
+});
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

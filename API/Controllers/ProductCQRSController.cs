@@ -22,7 +22,16 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-       
+        [HttpGet("GetFileContent")]
+        [AllowAnonymous]
+        public async Task<FileContentResult> GetFileContent(string fileUrl)
+        {
+            var urlSection =fileUrl.Split('/');
+            byte[] encryptedData =await System.IO.File.ReadAllBytesAsync("");
+            // var decryptedData = Decrypt(fileUrl);
+            return new FileContentResult(encryptedData, "application/txt");
+           
+        }
 
         [HttpPost]
        // [AccessControl(Permission = "create-product")]
@@ -34,7 +43,8 @@ namespace API.Controllers
         }
 
         [HttpGet("id")]
-        [AccessControl(Permission = "get-by-id")]
+        // [AccessControl(Permission = "get-by-id")]
+        [AllowAnonymous]
         public async Task <IActionResult> GetProduct([FromQuery] GetProductQuery getProductQuery)
         {
           

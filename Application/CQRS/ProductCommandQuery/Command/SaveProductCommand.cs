@@ -51,10 +51,10 @@ public class SaveProductCommandHandler : IRequestHandler<SaveProductCommand, Sav
             ProductName = request.ProductName,
             Price = request.Price,
             //save into folders
-            ThumbnailFileName = file.SaveFileInFolder(request.Thumbnail , nameof(Product)), //request.Thumbnail.FileName,
+            ThumbnailFileName = file.SaveFileInFolder(request.Thumbnail , nameof(Product), true), //request.Thumbnail.FileName,
 
 
-            Thumbnail = file.ConvertToByteArray(request.Thumbnail),
+            Thumbnail =file.EncryptFile(file.ConvertToByteArray(request.Thumbnail)) ,
             ThumbnailFileExtension = file.GetFileExtension(request.Thumbnail.FileName),
             FileSize = request.Thumbnail.Length
         };
