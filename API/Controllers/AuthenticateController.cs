@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Profiling;
 
 namespace API.Controllers
 {
@@ -20,10 +21,14 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Post(LoginCommand login)
         {
-           var result = await this.mediator.Send(login);
-            return Ok(result);
+            using (MiniProfiler.Current.Step("Login method"))
+            {
+                var result = await mediator.Send(login);
+                return Ok(result);
+            }
         }
 
+      
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserCommand registerUser)

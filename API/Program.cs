@@ -11,6 +11,7 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 //var builder = WebApplication.CreateBuilder(args);
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -20,9 +21,15 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     WebRootPath=Path.GetFullPath(Directory.GetCurrentDirectory()),
     Args=args
 });
-    
-    
-    
+
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
 
 //fill AppConfigurations from appsetting.json
 
@@ -53,8 +60,9 @@ builder.Services.AddMemoryCache();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SaveProductCommandHandler).Assembly));
-
-
+builder.Services.AddMemoryCache();
+builder.Services.AddMiniProfiler(option => option.RouteBasePath = "/profiler").AddEntityFramework();
+////results-index 
 
 
 // Register Swagger
@@ -80,6 +88,7 @@ if (app.Environment.IsDevelopment())
     });
 
 }
+app.UseMiniProfiler();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
