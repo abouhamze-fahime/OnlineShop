@@ -2,13 +2,17 @@ using API.CustomAttributes;
 using Application.Interfaces;
 using Infrastructure.Dto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using StackExchange.Profiling;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]/")]
+//[EnableCors("MyAPI")]
 [Authorize]
 public class ProductController : ControllerBase
 {
@@ -32,8 +36,12 @@ public class ProductController : ControllerBase
     [HttpGet()]
     public async Task<IActionResult> GetAll(int page , int size)
     {
-        var result = await _service.GetAllAsync(page , size );
-        return Ok(result);
+        using(MiniProfiler.Current.Step("Get products"))
+        {
+            // await HubContext.Clients.All.SendAsync("Notify" , $"Call Product at: {DateTime.Now}");
+            var result = await _service.GetAllAsync(page, size);
+            return Ok(result);
+        }
     }
 
 

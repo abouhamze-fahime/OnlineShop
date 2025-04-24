@@ -1,4 +1,5 @@
 using API;
+using API.Hubs;
 using Application;
 using Application.CQRS.ProductCommandQuery.Command;
 using Application.Interfaces;
@@ -22,8 +23,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args=args
 });
 
-
-var logger = new LoggerConfiguration()
+Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .CreateLogger();
@@ -32,7 +32,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
 //fill AppConfigurations from appsetting.json
-
+builder.Services.AddSignalR();
 builder.Services.AddOptions();
 builder.Services.Configure<AppConfigurations>(builder.Configuration.GetSection("AppConfigurations"));
 
@@ -75,6 +75,19 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwagger();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAPI",
+        builder =>
+        {
+            builder.WithOrigins("*");// api.domain.com
+            builder.WithHeaders("*");
+            builder.WithMethods("*");
+        });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,6 +108,7 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(builder.Environment.WebRootPath, "Media")),
     RequestPath = "/Media"
 });
+//app.UseCors("MyAPI");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -121,7 +135,7 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
 
